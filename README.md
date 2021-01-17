@@ -1,6 +1,7 @@
 https://github.com/kajirikajiri/next-puppeteer
 
 task
+- [ ] next-puppeteerが本番でget?post?可能か？
 - [ ] recordingを停止する
 - [ ] 不要なrecordingを削除する
 - [ ] recordingしたデータをfirestoreに送る
