@@ -21,6 +21,11 @@ task
 	- [x] clickはclick
 	- [ ] inputはinput
 
+- [x] 環境変数の取り扱い
+  - [x] firebaseはherokuとvercelに分散して、chrome-extensionから剥がした。
+    - 最初どうしようかと思ったが、iframeにnext vercelを埋め込んでvercelに環境変数をもたせた。
+    - apiは普通にherokuに
+
 - [x] clickしたelementを取得
 - [ ] inputしたtextを取得
 
