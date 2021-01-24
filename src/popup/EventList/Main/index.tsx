@@ -1,28 +1,33 @@
-import React, { useEffect, useState } from "react";
 import { browser } from "webextension-polyfill-ts";
-import "../Popup.scss";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 interface Req {
   selector?: string
   index?: number
 }
 
-export default function Popup() {
-  const [status, setStatus] = useState<'off'|'recording'|'normal'>('off')
+export default function Main(){
+  const [width, setWidth] = useState(0)
   const [events, setEvents] = useState<{selector:string,index:number}[]>([])
-  useEffect(() => {
-    (async()=> {
-      const tabs = await browser.tabs.query({ active: true, currentWindow: true });
-      const {success} = await browser.tabs.sendMessage(tabs[0].id, { loaded: true })
-    })()
-  }, [status]);
+  useEffect(()=>{
+    window.onresize = ()=>{
+      setWidth(window.innerWidth)
+    }
+    axios.get('https://next-puppeteer-dfsd.herokuapp.com/api/health').then((res)=>{
+      console.log(res)
+    })
+  }, [])
 
   useEffect(()=>{
     const callback = (req:Req) => {
-      if (req.selector && req.index) {
+      if (typeof req.selector === 'string' && typeof req.index === 'number') {
         const copy = [...events]
         copy.push({selector: req.selector, index: req.index})
         setEvents(copy)
+        ;(async()=>{
+          await browser.storage.local.set({currentEvents: copy})
+        })()
       }
       return Promise.resolve({success: true})
     }
@@ -30,28 +35,16 @@ export default function Popup() {
     return () => {
       browser.runtime.onMessage.removeListener(callback)
     }
-  })
-
-  const recording = async() => {
-    const tabs = await browser.tabs.query({ active: true, currentWindow: true });
-    const {success} = await browser.tabs.sendMessage(tabs[0].id, { recording: 'start' })
-
-    if (success) {
-      setStatus('recording')
-    }
-  }
+  }, [events])
 
   const handleClick= async(selector, index)=>{
     const tabs = await browser.tabs.query({ active: true, currentWindow: true });
     const {success} = await browser.tabs.sendMessage(tabs[0].id, { selector, index })
   }
 
-  if(status === 'recording') {
+  if(width > 0) {
     return (
       <>
-        <button className="w-full h-full flex justify-center items-center">
-          recording now
-        </button>
         <ul>
         {events.map((event, i)=>{
           return (
@@ -68,8 +61,6 @@ export default function Popup() {
   }
 
   return (
-    <div className="popupContainer">
-      <button onClick={recording}>start recording</button>
-    </div>
+    <></>
   )
 }

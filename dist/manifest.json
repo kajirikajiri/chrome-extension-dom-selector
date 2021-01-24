@@ -21,14 +21,13 @@
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": ["popup.html"],
+  "web_accessible_resources": ["mainMenu.html", "endButton.html", "eventList.html", "listenLogin.html", "eventPlayer.html"],
 
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",
     "128": "icon128.png"
   },
-
-  "permissions": ["tabs"]
+  "permissions": ["tabs", "storage", "management"]
 }
 
