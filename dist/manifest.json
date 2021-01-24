@@ -21,7 +21,7 @@
       "run_at": "document_start"
     }
   ],
-  "web_accessible_resources": ["mainMenu.html", "endButton.html", "eventList.html", "listenLogin.html", "eventPlayer.html"],
+  "web_accessible_resources": ["mainMenu.html", "endButton.html", "eventList.html", "eventPlayer.html"],
 
   "icons": {
     "16": "icon16.png",

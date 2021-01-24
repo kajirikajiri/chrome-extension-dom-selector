@@ -6,6 +6,9 @@ import {v4 as uuid} from 'uuid'
 
 export default function Popup() {
   const [width, setWidth] = useState(0)
+  const [events, setEvents] = useState<{selector:string,index:number}[]>([])
+  const [saved, setSaved] = useState(false)
+  const [userUuid, setUserUuid] = useState<string>()
   useEffect(()=>{
     (async()=>{
       const tabs = await browser.tabs.query({ active: true, currentWindow: true });
@@ -14,7 +17,26 @@ export default function Popup() {
     window.onresize = ()=>{
       setWidth(window.innerWidth)
     }
+    browser.storage.local.get(['userUuid']).then(({userUuid})=>{
+      if (typeof userUuid === 'string') {
+        setUserUuid(userUuid)
+      }
+    })
   }, [])
+
+  useEffect(()=>{
+    browser.storage.local.get(["currentEvents"]).then(({currentEvents})=>{
+      if (Array.isArray(currentEvents) && currentEvents.length > 0) {
+        setEvents(currentEvents)
+      }
+    })
+  }, [width])
+
+  useEffect(()=>{
+    if (Array.isArray(events) && events.length > 0) {
+      setSaved(false)
+    }
+  }, [events])
 
   const recordingStart = async() => {
     const tabs = await browser.tabs.query({ active: true, currentWindow: true });
@@ -22,41 +44,38 @@ export default function Popup() {
   }
 
   const saveRecordingData = async()=>{
-    // axios.post('https://next-puppeteer-dfsd.herokuapp.com/api/test').then((res)=>{
-    const {currentEvents, userUuid} =  await browser.storage.local.get(['currentEvents', 'userUuid'])
-    console.log(currentEvents)
-    axios.post('http://localhost:4000/api/domEvent/create', {
-      eventsUuid: uuid(),
-      userUuid,
-      events: currentEvents,
-      eventsLabel: 'sample'
-    }).then((res)=>{
-      console.log(res)
-    })
-    browser.storage.local.set({currentEvents: undefined})
+    if (typeof userUuid === 'string' && Array.isArray(events) && events.length > 0) {
+      axios.post('http://localhost:4000/api/domEvent/create', {
+        events,
+        userUuid,
+        eventsUuid: uuid(),
+        eventsLabel: 'sample'
+      }).then((res)=>{
+        browser.storage.local.set({currentEvents: []})
+        setEvents([])
+        setSaved(true)
+      })
+    }
   }
 
   const showRecordingData = async()=>{
     const tabs = await browser.tabs.query({ active: true, currentWindow: true });
     const {success} = await browser.tabs.sendMessage(tabs[0].id, { showRecordingData: true })
-    // axios.post('https://next-puppeteer-dfsd.herokuapp.com/api/test').then((res)=>{
-    // const {currentEvents, userUuid} =  await browser.storage.local.get(['currentEvents', 'userUuid'])
-    // console.log(currentEvents)
-    // axios.get('http://localhost:4000/api/domEvent/index', {
-    //   params: {
-    //     userUuid
-    //   }
-    // }).then((res)=>{
-    //   console.log(res)
-    // })
+  }
+
+  const showLogout = async() => {
+    const tabs = await browser.tabs.query({ active: true, currentWindow: true });
+    const {success} = await browser.tabs.sendMessage(tabs[0].id, { showLogout: true })
   }
 
   if(width > 0) {
     return (
       <div className="flex flex-col">
         <button onClick={recordingStart}>start recording</button>
-        <button onClick={saveRecordingData}>save recording data</button>
+        {events.length > 0 ? <button onClick={saveRecordingData}>save recording data</button>:<></>}
+        {saved ? 'saved !!':''}
         <button onClick={showRecordingData}>show recording data</button>
+        <button onClick={showLogout}>logout</button>
       </div>
     )
   }

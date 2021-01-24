@@ -1,16 +1,21 @@
 import { browser } from "webextension-polyfill-ts";
-import { addIframeMainMenu } from "./addIframeMainMenu";
-import {addIframeEventList} from './addIframeEventList'
-import {addIframeEndButton} from './addIframeEndButton'
-import { toggle } from "./toggle";
-import { open } from "./open";
 import { startRecording } from "./startRecording";
 import { endRecording } from "./endRecording";
-import { addIframeLogin } from "./addIframeLogin";
-import { addIframeListenLogin } from "./addIframeListenLogin";
 import {postMessage} from './postMessage'
-import { addIframeEventPlayer } from "./addIframeEventPlayer";
-import {showRecordingData} from './showRecordingData'
+import {IframeLogin} from './iframes/login'
+import { IframeMainMenu } from "./iframes/mainMenu";
+import { IframeLogout } from "./iframes/logout";
+import { IframeEndButton } from "./iframes/endButton";
+import { IframeEventList } from "./iframes/eventList";
+import { IframeEventPlayer } from "./iframes/eventPlayer";
+import { Iframe } from "./iframes/common";
+import { showRecordingData } from "./showRecordingData";
+import { showLogout } from "./showLogout";
+import { execSmoothScroll } from "./execSmoothScroll";
+import { execLoadedAction } from "./execLoadedAction";
+import { showLogin } from "./showLogin";
+import { showMainMenu } from "./showMainMenu";
+import { execSetLogin } from "./execSetLogin";
 
 interface Req {
   toggle?: true
@@ -21,6 +26,7 @@ interface Req {
   loginSuccess?:true
   showRecordingData?:true
   quickClick?:true
+  showLogout?:true
 }
 
 (async()=>{
@@ -28,68 +34,82 @@ interface Req {
   await browser.storage.local.set({isLogin: false, loaded: false})
 })()
 
-const iframeMainMenu = document.createElement("iframe");
-const iframeEndButton = document.createElement("iframe");
-const iframeEventList = document.createElement("iframe");
-const iframeLogin = document.createElement("iframe");
-const iframeListenLogin = document.createElement("iframe");
-const iframeEventPlayer = document.createElement("iframe");
+const iframeMainMenu = new IframeMainMenu()
+const iframeEndButton = new IframeEndButton()
+const iframeEventList = new IframeEventList()
+const iframeLogin = new IframeLogin()
+const iframeLogout = new IframeLogout()
+const iframeEventPlayer = new IframeEventPlayer()
+const allIframe = [
+iframeMainMenu,
+iframeEndButton,
+iframeEventList,
+iframeLogin,
+iframeLogout,
+iframeEventPlayer,
+]
+
+const closeAllIframe = (ignoreIframes?: Iframe[]) => {
+  if (typeof ignoreIframes === 'undefined') {
+    allIframe.forEach((iframe)=>{
+      iframe.hide()
+    })
+  } else {
+    allIframe.forEach((iframe)=>{
+      if(!ignoreIframes.includes(iframe)){
+        iframe.hide()
+      }
+    })
+  }
+}
 
 window.onload = () => {
-  addIframeMainMenu(iframeMainMenu);
-  addIframeEndButton(iframeEndButton);
-  addIframeEventList(iframeEventList);
-  addIframeLogin(iframeLogin);
-  addIframeListenLogin(iframeListenLogin);
-  addIframeEventPlayer(iframeEventPlayer);
+  iframeMainMenu.appendChild()
+  iframeEndButton.appendChild()
+  iframeEventList.appendChild()
+  iframeLogin.appendChild()
+  iframeLogout.appendChild()
+  iframeEventPlayer.appendChild()
 };
 
 browser.runtime.onMessage.addListener((req:Req) => {
   const res = browser.storage.local.get(['isLogin', 'loaded']).then(({isLogin, loaded})=>{
     if (req.loaded === true) {
-      const res = browser.storage.local.set({loaded: true}).then(()=>{
-        const res = browser.runtime.sendMessage({setLoadedIcon: true}).then(()=>{
-          return Promise.resolve({success: true})
-        })
-        return res
-      })
+      const res = execLoadedAction()
       return res
+    } else if (isLogin === false && req.toggle === true) {
+      showLogin(loaded, iframeLogin)
+      return Promise.resolve({success: true})
+    } else if (isLogin === true && req.toggle === true) {
+      showMainMenu(loaded, iframeMainMenu)
+      return Promise.resolve({success: true})
     } else if (isLogin === false || typeof isLogin === 'undefined') {
-      if (req.loginSuccess) {
-        const res = browser.storage.local.set({isLogin: true}).then(()=>{
-          return Promise.resolve({success: true, isLoginStatus: true})
-        })
+      if (req.loginSuccess === true) {
+        const res = execSetLogin()
         return res
       }
-    } else if (req.toggle) {
-      if (loaded) {
-        toggle(iframeMainMenu, iframeLogin)
-      } else {
-        open(iframeMainMenu, iframeLogin)
-      }
-      return Promise.resolve({success: true})
     } else if (req.recording === 'start') {
-      startRecording(iframeMainMenu, iframeEndButton, iframeEventList)
+      startRecording(closeAllIframe, iframeEndButton, iframeEventList)
       return Promise.resolve({success: true})
     } else if (req.recording === 'end') {
-      endRecording(iframeMainMenu, iframeEndButton, iframeEventList)
+      endRecording(closeAllIframe, iframeMainMenu)
       return Promise.resolve({success: true})
     } else if (req.selector && 'index' in req && req.quickClick === true) {
-      console.log(`document.querySelectorAll('${req.selector}')[${req.index}]`)
-      const el = document.querySelectorAll(req.selector)[req.index]
-      el.scrollIntoView()
+      execSmoothScroll(req.selector, req.index)
       return Promise.resolve({success: true})
     } else if (req.selector && 'index' in req) {
-      console.log(`document.querySelectorAll('${req.selector}')[${req.index}]`)
       const el = document.querySelectorAll(req.selector)[req.index]
       el.scrollIntoView({ behavior: "smooth" })
       return Promise.resolve({success: true})
     } else if (req.showRecordingData === true) {
-      showRecordingData(iframeMainMenu, iframeEventList, iframeEventPlayer)
+      showRecordingData(closeAllIframe, iframeEventPlayer, iframeMainMenu)
+      return Promise.resolve({success: true})
+    } else if (req.showLogout === true) {
+      showLogout(closeAllIframe, iframeLogout)
       return Promise.resolve({success: true})
     }
   })
   return res
 })
 
-postMessage(iframeMainMenu, iframeLogin)
+postMessage(closeAllIframe ,iframeMainMenu, iframeLogin, iframeLogout)

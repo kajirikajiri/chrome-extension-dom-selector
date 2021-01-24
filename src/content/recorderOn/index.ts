@@ -1,8 +1,10 @@
 import $ from 'jquery'
 import { browser } from 'webextension-polyfill-ts';
+import { IframeEndButton } from '../iframes/endButton';
+import { IframeEventList } from '../iframes/eventList';
 
-export const recorderOn = (ignoreSelector) => {
-  $("*").not(ignoreSelector).on("click", function() {
+export const recorderOn = (iframeEndButton:IframeEndButton, iframeEventList: IframeEventList) => {
+  $("*").not(iframeEndButton.element).not(iframeEventList.element).on("click", function() {
     var selector = $(this)
         .parents()
         .map(function() { return this.tagName; })

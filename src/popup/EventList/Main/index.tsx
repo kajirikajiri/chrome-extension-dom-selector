@@ -20,6 +20,16 @@ export default function Main(){
   }, [])
 
   useEffect(()=>{
+    browser.storage.local.get(["currentEvents"]).then(({currentEvents})=>{
+      if (Array.isArray(currentEvents) && currentEvents.length > 0) {
+        setEvents(currentEvents)
+      } else if (Array.isArray(currentEvents) && currentEvents.length === 0){
+        setEvents(currentEvents)
+      }
+    })
+  }, [width])
+
+  useEffect(()=>{
     const callback = (req:Req) => {
       if (typeof req.selector === 'string' && typeof req.index === 'number') {
         const copy = [...events]

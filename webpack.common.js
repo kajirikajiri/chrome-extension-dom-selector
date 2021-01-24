@@ -3,7 +3,6 @@ const path = require("path");
 
 module.exports = {
   entry: {
-    listenLogin: path.join(__dirname, "src/popup/ListenLogin/index.tsx"),
     mainMenu: path.join(__dirname, "src/popup/MainMenu/index.tsx"),
     endButton: path.join(__dirname, "src/popup/EndButton/index.tsx"),
     eventList: path.join(__dirname, "src/popup/EventList/index.tsx"),

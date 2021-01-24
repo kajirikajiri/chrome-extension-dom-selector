@@ -1,7 +1,10 @@
-export const showRecordingData = (iframeMainMenu: HTMLIFrameElement, iframeEventList: HTMLIFrameElement, iframeEventPlayer: HTMLIFrameElement)=>{
-  iframeMainMenu.style.width = '300px'
-  
-  iframeEventPlayer.style.width = '200px'
+import { Iframe } from '../iframes/common';
+import { IframeEventPlayer } from '../iframes/eventPlayer';
+import { IframeMainMenu } from '../iframes/mainMenu';
 
-  iframeEventList.style.width = '0px'
+export function showRecordingData(closeAllIframe: (ignoreIframes?: Iframe[])=>void, iframeEventPlayer: IframeEventPlayer, iframeMainMenu: IframeMainMenu) {
+  iframeEventPlayer.show()
+  iframeMainMenu.show()
+  closeAllIframe([iframeEventPlayer, iframeMainMenu])
 }
+

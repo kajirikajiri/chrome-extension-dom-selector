@@ -1,20 +1,45 @@
 https://github.com/kajirikajiri/next-puppeteer
 
 task
-- [ ] recordingを停止する
+- [x] 未ログインからのログイン成功時に何も表示されない
+  - [x] ログイン済みからだと表示されるよ
+
+- [x] listenLoginっている？（いらない
+
+- [x] それぞれの画面のサイズが適当すぎる
+  - [x] 基本サイズを決めるかデザインの確定 クラスにしたよ
+
+- [x] logoutにキャンセルボタン系(ふようになったよ)
+
+- [x] ログアウト機能
+- [x] recordingを停止する
 - [ ] 不要なrecordingを削除する
-- [ ] recordingしたデータをfirestoreに送る
-- [ ] firestoreからrecordingデータを取得する
-- [ ] firestoreからrecordingデータを表示する
-- [ ] firestoreから取得したデータを実行する
-	- [ ] clickはclick
+- [x] recordingしたデータをfirestoreに送る
+- [x] firestoreからrecordingデータを取得する
+- [x] firestoreから取得したrecordingデータを表示する
+- [x] firestoreから取得したデータを実行する
+	- [x] clickはclick
 	- [ ] inputはinput
 
 - [x] clickしたelementを取得
 - [ ] inputしたtextを取得
 
 - [ ] 定期実行？
-- [ ] 未ログインからのログイン成功時に何も表示されない
-  - [ ] ログイン済みからだと表示されるよ
 
-- [ ] listenLoginっている？
+- [ ] listernerのremove
+
+- [ ] sendmessage next-puppeteer refactor 重複
+
+- [ ] apiの確認してない
+
+- [ ] それぞれに削除機能の実装
+  - [ ] event一覧(recording時)
+  - [ ] event一覧(一覧表示時)
+
+- [ ] それぞれに編集機能の実装
+  - [ ] event一覧(recording時)
+  - [ ] event一覧(一覧表示時)
+
+- [ ] それぞれに編集機能の追加
+  - [ ] event一覧のラベル(recording時)
+  - [ ] event一覧のラベル(一覧表示時)
