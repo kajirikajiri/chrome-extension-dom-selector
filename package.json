@@ -3,9 +3,9 @@
   "version": "1.1.0",
   "description": "A boilerplate project to quickly build a Chrome extension using TypeScript and React (built using webpack).",
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
-    "dev": "webpack --config webpack.dev.js",
-    "watch": "webpack -w --config webpack.dev.js"
+    "build": "NODE_ENV=production webpack --config webpack.prod.js",
+    "dev": "NODE_ENV=development webpack --config webpack.dev.js",
+    "watch": "NODE_ENV=development webpack -w --config webpack.dev.js"
   },
   "author": "Joe Martella",
   "license": "MIT",
@@ -27,6 +27,7 @@
     "autoprefixer": "^10.2.1",
     "axios": "^0.21.1",
     "css-selector-generator": "^2.1.2",
+    "dotenv": "^8.2.0",
     "firebase": "^8.2.4",
     "firebaseui": "^4.7.1",
     "jquery": "^3.5.1",

@@ -1,15 +1,9 @@
 import { browser } from "webextension-polyfill-ts";
-import { env } from "./env";
 
 interface Req {
   setLoadedIcon?: true
   setLoadingIcon?: true
 }
-
-(async()=>{
-  const envValues = await env()
-  await browser.storage.local.set({env: envValues })
-})()
 
 browser.browserAction.onClicked.addListener((tab) => {
   (async () => {
