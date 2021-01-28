@@ -1,20 +1,18 @@
-import { browser } from "webextension-polyfill-ts";
 import React, { useEffect, useState } from "react";
 import { getRecordingData } from "./getRecordingData";
-import { Event } from "./types/event";
 import { EventsList } from "./types/eventsList";
 import { execEvents } from "./execEvents";
-import { execEvent } from "../../../scripts/execEvent";
+import { EventsComponent } from "./EventsComponent";
 
 export default function Main(){
   console.log('player')
   const [width, setWidth] = useState(0)
-  const [events, setEvents] = useState<EventsList[]>([])
+  const [eventsList, setEventsList] = useState<EventsList[]>([])
 
   useEffect(()=>{
     ;(async()=>{
       const res = await getRecordingData()
-      setEvents(res)
+      setEventsList(res)
     })()
   }, [width])
 
@@ -24,8 +22,8 @@ export default function Main(){
     }
   }, [])
 
-  const handleClick=(selector, index)=>{
-    execEvent(selector, index)
+  const handleClick=(events)=>{
+    execEvents(events)
   }
 
   if(width > 0) {
@@ -33,24 +31,14 @@ export default function Main(){
       <>
         <div>header events player</div>
         <div className="w-full">
-        {events.map(({label, events}, i)=>{
+        {eventsList.map(({label, events}, i)=>{
           return (
             <div className="flex justify-between">
               <details>
               <summary>{label}</summary>
-              {
-                events.map(({selector, index})=>{
-                return (
-                  <div>
-                    <button onClick={()=>handleClick(selector, index)}>
-                      {index}
-                    </button>
-                  </div>
-                )
-                })
-              }
+              <EventsComponent events={events}/>
               </details>
-              <button onClick={()=>execEvents(events)}>▶︎</button>
+              <button onClick={()=>handleClick(events)}>▶︎</button>
             </div>
           )
         })}
