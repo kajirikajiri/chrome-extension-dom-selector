@@ -1,0 +1,15 @@
+details > summary {
+    list-style-type: none;
+}
+details > summary::-webkit-details-marker {
+    display: none;
+}
+details > summary::before {
+    content: '️🔽';
+}
+details[open] > summary::before {
+    content: '🔼';
+}
+details {
+  cursor: pointer;
+}
