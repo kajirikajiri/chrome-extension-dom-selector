@@ -1,6 +1,7 @@
 import { browser } from "webextension-polyfill-ts";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { resetBrowserStorageEvents } from "../../../scripts/resetBrowserStorageEvents";
 
 interface Req {
   selector?: string
@@ -52,6 +53,11 @@ export default function Main(){
     const {success} = await browser.tabs.sendMessage(tabs[0].id, { selector, index })
   }
 
+  const handleClickReset = () =>{
+    resetBrowserStorageEvents()
+    setEvents([])
+  }
+
   if(width > 0) {
     return (
       <>
@@ -66,6 +72,7 @@ export default function Main(){
           )
         })}
         </ul>
+        <button className="fixed bottom-0" onClick={handleClickReset}>reset events</button>
       </>
     )
   }

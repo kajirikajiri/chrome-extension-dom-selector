@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { browser } from "webextension-polyfill-ts";
 import "../Popup.scss";
 import {v4 as uuid} from 'uuid'
+import { resetBrowserStorageEvents } from "../../../scripts/resetBrowserStorageEvents";
 
 export default function Popup() {
   const [width, setWidth] = useState(0)
@@ -51,7 +52,7 @@ export default function Popup() {
         eventsUuid: uuid(),
         eventsLabel: 'sample'
       }).then((res)=>{
-        browser.storage.local.set({currentEvents: []})
+        resetBrowserStorageEvents()
         setEvents([])
         setSaved(true)
       })
