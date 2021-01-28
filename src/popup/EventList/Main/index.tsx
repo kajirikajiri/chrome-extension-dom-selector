@@ -2,6 +2,7 @@ import { browser } from "webextension-polyfill-ts";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { resetBrowserStorageEvents } from "../../../scripts/resetBrowserStorageEvents";
+import { execEvent } from "../../../scripts/execEvent";
 
 interface Req {
   selector?: string
@@ -49,8 +50,7 @@ export default function Main(){
   }, [events])
 
   const handleClick= async(selector, index)=>{
-    const tabs = await browser.tabs.query({ active: true, currentWindow: true });
-    const {success} = await browser.tabs.sendMessage(tabs[0].id, { selector, index })
+    execEvent(selector, index)
   }
 
   const handleClickReset = () =>{

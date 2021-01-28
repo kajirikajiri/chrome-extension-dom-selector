@@ -4,6 +4,7 @@ import { getRecordingData } from "./getRecordingData";
 import { Event } from "./types/event";
 import { EventsList } from "./types/eventsList";
 import { execEvents } from "./execEvents";
+import { execEvent } from "../../../scripts/execEvent";
 
 export default function Main(){
   console.log('player')
@@ -24,13 +25,13 @@ export default function Main(){
   }, [])
 
   const handleClick=(selector, index)=>{
-    console.log(selector, index)
+    execEvent(selector, index)
   }
 
   if(width > 0) {
     return (
       <>
-        <div>header events list</div>
+        <div>header events player</div>
         <div className="w-full">
         {events.map(({label, events}, i)=>{
           return (
