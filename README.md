@@ -58,3 +58,5 @@ task
   - dotenvを使用した
 
 - [ ] apiを本番につなぐ
+
+- [ ] prettier,lintほしいなー
