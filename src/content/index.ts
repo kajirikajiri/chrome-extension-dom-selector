@@ -16,10 +16,11 @@ import { execLoadedAction } from "./execLoadedAction";
 import { showLogin } from "./showLogin";
 import { showMainMenu } from "./showMainMenu";
 import { execSetLogin } from "./execSetLogin";
+import { Recorder } from "./recorder";
 
 interface Req {
   toggle?: true;
-  recording?: "start" | "end";
+  recording?: "start" | "stop";
   loaded?: true;
   selector?: string;
   index?: number;
@@ -72,6 +73,8 @@ window.onload = () => {
   iframeEventPlayer.appendChild();
 };
 
+const recorder = new Recorder([iframeEndButton, iframeEventList]);
+
 browser.runtime.onMessage.addListener((req: Req) => {
   const res = browser.storage.local
     .get(["isLogin", "loaded"])
@@ -83,7 +86,7 @@ browser.runtime.onMessage.addListener((req: Req) => {
         showLogin(loaded, iframeLogin);
         return Promise.resolve({ success: true });
       } else if (isLogin === true && req.toggle === true) {
-        showMainMenu(loaded, iframeMainMenu);
+        showMainMenu(closeAllIframe, loaded, iframeMainMenu);
         return Promise.resolve({ success: true });
       } else if (isLogin === false || typeof isLogin === "undefined") {
         if (req.loginSuccess === true) {
@@ -91,10 +94,15 @@ browser.runtime.onMessage.addListener((req: Req) => {
           return res;
         }
       } else if (req.recording === "start") {
-        startRecording(closeAllIframe, iframeEndButton, iframeEventList);
+        startRecording(
+          closeAllIframe,
+          recorder,
+          iframeEndButton,
+          iframeEventList
+        );
         return Promise.resolve({ success: true });
-      } else if (req.recording === "end") {
-        endRecording(closeAllIframe, iframeMainMenu);
+      } else if (req.recording === "stop") {
+        endRecording(closeAllIframe, recorder, iframeMainMenu);
         return Promise.resolve({ success: true });
       } else if (req.selector && "index" in req && req.quickClick === true) {
         execSmoothScroll(req.selector, req.index);

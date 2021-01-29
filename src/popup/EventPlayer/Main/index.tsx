@@ -5,7 +5,6 @@ import { execEvents } from "./execEvents";
 import { EventsComponent } from "./EventsComponent";
 
 export default function Main() {
-  console.log("player");
   const [width, setWidth] = useState(0);
   const [eventsList, setEventsList] = useState<EventsList[]>([]);
 

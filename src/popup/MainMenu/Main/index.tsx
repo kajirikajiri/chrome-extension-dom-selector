@@ -4,6 +4,9 @@ import { browser } from "webextension-polyfill-ts";
 import "../Popup.scss";
 import { v4 as uuid } from "uuid";
 import { resetBrowserStorageEvents } from "../../../scripts/resetBrowserStorageEvents";
+import dayjs from "dayjs";
+import { getRecordingData } from "../../EventPlayer/Main/getRecordingData";
+import { api } from "../../../scripts/api";
 
 export default function Popup() {
   const [width, setWidth] = useState(0);
@@ -12,6 +15,7 @@ export default function Popup() {
   );
   const [saved, setSaved] = useState(false);
   const [userUuid, setUserUuid] = useState<string>();
+  const [hasEventsList, setHasEventsList] = useState(false);
   useEffect(() => {
     (async () => {
       const tabs = await browser.tabs.query({
@@ -30,6 +34,12 @@ export default function Popup() {
         setUserUuid(userUuid);
       }
     });
+    (async () => {
+      const res = await getRecordingData();
+      if (res.length > 0) {
+        setHasEventsList(true);
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -62,16 +72,19 @@ export default function Popup() {
       Array.isArray(events) &&
       events.length > 0
     ) {
-      axios
-        .post("http://localhost:4000/api/domEvent/create", {
+      api
+        .post("domEvent/create", {
           events,
           userUuid,
           eventsUuid: uuid(),
           eventsLabel: "sample",
+          createdAt: dayjs(),
+          updatedAt: dayjs(),
         })
         .then((res) => {
           resetBrowserStorageEvents();
           setEvents([]);
+          setHasEventsList(true); // 保存に成功したのだからイベントが１つはあると仮定する
           setSaved(true);
         });
     }
@@ -107,7 +120,11 @@ export default function Popup() {
           <></>
         )}
         {saved ? "saved !!" : ""}
-        <button onClick={showRecordingData}>show recording data</button>
+        {hasEventsList ? (
+          <button onClick={showRecordingData}>show recording data</button>
+        ) : (
+          <></>
+        )}
         <button onClick={showLogout}>logout</button>
       </div>
     );

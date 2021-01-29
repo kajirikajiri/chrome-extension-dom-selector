@@ -1,5 +1,5 @@
-import axios from "axios";
 import { browser } from "webextension-polyfill-ts";
+import { api } from "../../../../scripts/api";
 import { EventsList } from "../types/eventsList";
 
 export const getRecordingData = async () => {
@@ -8,15 +8,13 @@ export const getRecordingData = async () => {
     "currentEvents",
     "userUuid",
   ]);
-  console.log(currentEvents);
-  const res = await axios
-    .get<EventsList[]>("http://localhost:4000/api/domEvent/index", {
+  const res = await api
+    .get<EventsList[]>("domEvent/index", {
       params: {
         userUuid,
       },
     })
     .then(({ data }) => {
-      console.log(1, data);
       return data;
     });
   return res;

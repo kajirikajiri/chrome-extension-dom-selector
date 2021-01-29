@@ -1,10 +1,11 @@
 import { Iframe } from "../iframes/common";
 import { IframeEndButton } from "../iframes/endButton";
 import { IframeEventList } from "../iframes/eventList";
-import { recorderOn } from "../recorderOn";
+import { Recorder } from "../recorder";
 
 export function startRecording(
   closeAllIframe: (ignoreIframes?: Iframe[]) => void,
+  recorder: Recorder,
   iframeEndButton: IframeEndButton,
   iframeEventList: IframeEventList
 ) {
@@ -12,5 +13,5 @@ export function startRecording(
   iframeEventList.show({ top: "110px", right: "0px" });
   closeAllIframe([iframeEndButton, iframeEventList]);
 
-  recorderOn(iframeEndButton, iframeEventList);
+  recorder.on();
 }

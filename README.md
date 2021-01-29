@@ -1,64 +1,76 @@
 https://github.com/kajirikajiri/next-puppeteer
 
 task
+
 - [x] 未ログインからのログイン成功時に何も表示されない
+
   - [x] ログイン済みからだと表示されるよ
 
-- [x] listenLoginっている？（いらない
+- [x] listenLogin っている？（いらない
 
 - [x] それぞれの画面のサイズが適当すぎる
+
   - [x] 基本サイズを決めるかデザインの確定 クラスにしたよ
 
-- [x] logoutにキャンセルボタン系(ふようになったよ)
+- [x] logout にキャンセルボタン系(ふようになったよ)
 
 - [x] ログアウト機能
-- [x] recordingを停止する
-- [ ] 不要なrecordingを削除する
-- [x] recordingしたデータをfirestoreに送る
-- [x] firestoreからrecordingデータを取得する
-- [x] firestoreから取得したrecordingデータを表示する
-- [x] firestoreから取得したデータを実行する
-	- [x] clickはclick
-	- [ ] inputはinput
+- [x] recording を停止する
+- [ ] 不要な recording を削除する
+- [x] recording したデータを firestore に送る
+- [x] firestore から recording データを取得する
+- [x] firestore から取得した recording データを表示する
+- [x] firestore から取得したデータを実行する
+
+  - [x] click は click
+  - [ ] input は input
 
 - [x] 環境変数の取り扱い
-  - [x] firebaseはherokuとvercelに分散して、chrome-extensionから剥がした。
-    - 最初どうしようかと思ったが、iframeにnext vercelを埋め込んでvercelに環境変数をもたせた。
-    - apiは普通にherokuに
 
-- [x] clickしたelementを取得
-- [ ] inputしたtextを取得
+  - [x] firebase は heroku と vercel に分散して、chrome-extension から剥がした。
+    - 最初どうしようかと思ったが、iframe に next vercel を埋め込んで vercel に環境変数をもたせた。
+    - api は普通に heroku に
+
+- [x] click した element を取得
+- [ ] input した text を取得
 
 - [ ] 定期実行？
 
-- [ ] listernerのremove
+- [ ] listerner の remove
 
 - [ ] sendmessage next-puppeteer refactor 重複
 
-- [ ] apiの確認してない
+- [ ] api の確認してない
 
 - [ ] それぞれに削除機能の実装
-  - [ ] event一覧(recording時)
-  - [ ] event一覧(一覧表示時)
+
+  - [ ] event 一覧(recording 時)
+  - [ ] event 一覧(一覧表示時)
 
 - [ ] それぞれに編集機能の実装
-  - [ ] event一覧(recording時)
-  - [ ] event一覧(一覧表示時)
+
+  - [ ] event 一覧(recording 時)
+  - [ ] event 一覧(一覧表示時)
 
 - [ ] それぞれに編集機能の追加
-  - [ ] event一覧のラベル(recording時)
-  - [ ] event一覧のラベル(一覧表示時)
 
-- [ ] サイトのURLを判定してそのサイトのURLに紐づくselectorを出す
+  - [ ] event 一覧のラベル(recording 時)
+  - [ ] event 一覧のラベル(一覧表示時)
+
+- [ ] サイトの URL を判定してそのサイトの URL に紐づく selector を出す
+
   - 微妙な気がする。サイトをまたぐ可能性もある
 
-- [ ] domの出現を待つ
+- [ ] dom の出現を待機してクリックする
 
 - [x] 環境を意識したくない
-  - dotenvを使用した
 
-- [ ] apiを本番につなぐ
+  - dotenv を使用した
 
-- [ ] prettier,lintほしいなー
+- [x] api を本番につなぐ
 
-- [ ] loading中にアイコンを押したら、押したことをわかるようにしたい
+- [x] prettier,lint ほしいなー
+
+- [ ] loading 中にアイコンを押したら、押したことをわかるようにしたい
+
+- [x] recording stop

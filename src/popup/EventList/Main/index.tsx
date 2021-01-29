@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { resetBrowserStorageEvents } from "../../../scripts/resetBrowserStorageEvents";
 import { execEvent } from "../../../scripts/execEvent";
+import dayjs from "dayjs";
+import { Event } from "../../EventPlayer/Main/types/event";
 
 interface Req {
   selector?: string;
@@ -11,18 +13,12 @@ interface Req {
 
 export default function Main() {
   const [width, setWidth] = useState(0);
-  const [events, setEvents] = useState<{ selector: string; index: number }[]>(
-    []
-  );
+  const [events, setEvents] = useState<Event[]>([]);
   useEffect(() => {
     window.onresize = () => {
       setWidth(window.innerWidth);
     };
-    axios
-      .get("https://next-puppeteer-dfsd.herokuapp.com/api/health")
-      .then((res) => {
-        console.log(res);
-      });
+    axios.get("https://next-puppeteer-dfsd.herokuapp.com/api/health");
   }, []);
 
   useEffect(() => {
@@ -39,7 +35,12 @@ export default function Main() {
     const callback = (req: Req) => {
       if (typeof req.selector === "string" && typeof req.index === "number") {
         const copy = [...events];
-        copy.push({ selector: req.selector, index: req.index });
+        copy.push({
+          selector: req.selector,
+          index: req.index,
+          createdAt: dayjs().format(),
+          updatedAt: dayjs().format(),
+        });
         setEvents(copy);
         (async () => {
           await browser.storage.local.set({ currentEvents: copy });
@@ -68,7 +69,7 @@ export default function Main() {
         <ul>
           {events.map((event, i) => {
             return (
-              <li>
+              <li key={i}>
                 <button
                   onClick={() => handleClick(event.selector, event.index)}
                 >

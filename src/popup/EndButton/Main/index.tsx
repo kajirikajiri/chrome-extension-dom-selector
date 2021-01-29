@@ -16,7 +16,7 @@ export default function Main() {
       currentWindow: true,
     });
     const { success } = await browser.tabs.sendMessage(tabs[0].id, {
-      recording: "end",
+      recording: "stop",
     });
   };
 
