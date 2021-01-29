@@ -1,9 +1,9 @@
-import { IframeLogin } from "../iframes/login"
+import { IframeLogin } from "../iframes/login";
 
-export const showLogin= (loaded: boolean, iframeLogin: IframeLogin)=>{
+export const showLogin = (loaded: boolean, iframeLogin: IframeLogin) => {
   if (loaded) {
-    iframeLogin.toggle()
+    iframeLogin.toggle();
   } else {
-    iframeLogin.show()
+    iframeLogin.show();
   }
-}
+};

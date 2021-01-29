@@ -1,9 +1,9 @@
 export abstract class Iframe {
-  width: string
-  element: HTMLIFrameElement
+  width: string;
+  element: HTMLIFrameElement;
 
   constructor() {
-    this.width = '250px'
+    this.width = "250px";
     this.element = document.createElement("iframe");
     this.element.style.background = "#fff";
     this.element.style.height = "240px";
@@ -15,33 +15,33 @@ export abstract class Iframe {
     this.element.style.zIndex = "2147483646";
   }
 
-  isShow(){
-    return !(this.element.style.width === "0px")
+  isShow() {
+    return !(this.element.style.width === "0px");
   }
 
-  hide(){
-    this.element.style.width = '0px'
+  hide() {
+    this.element.style.width = "0px";
   }
 
-  show(style?: {top?:string, right?:string}){
-    this.element.style.width = this.width
-    if (typeof style?.top === 'string') {
-      this.element.style.top = style.top
+  show(style?: { top?: string; right?: string }) {
+    this.element.style.width = this.width;
+    if (typeof style?.top === "string") {
+      this.element.style.top = style.top;
     }
-    if (typeof style?.right === 'string') {
-      this.element.style.right = style.right
-    }
-  }
-
-  toggle(){
-    if(this.element.style.width === "0px") {
-      this.show()
-    }else {
-      this.hide()
+    if (typeof style?.right === "string") {
+      this.element.style.right = style.right;
     }
   }
 
-  appendChild(){
-    document.body.appendChild(this.element)
+  toggle() {
+    if (this.element.style.width === "0px") {
+      this.show();
+    } else {
+      this.hide();
+    }
+  }
+
+  appendChild() {
+    document.body.appendChild(this.element);
   }
 }

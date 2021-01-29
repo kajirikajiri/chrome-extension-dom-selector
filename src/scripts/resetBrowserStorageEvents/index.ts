@@ -1,5 +1,5 @@
-import { browser } from "webextension-polyfill-ts"
+import { browser } from "webextension-polyfill-ts";
 
-export const resetBrowserStorageEvents = ()=>{
-  browser.storage.local.set({currentEvents: []})
-}
+export const resetBrowserStorageEvents = () => {
+  browser.storage.local.set({ currentEvents: [] });
+};

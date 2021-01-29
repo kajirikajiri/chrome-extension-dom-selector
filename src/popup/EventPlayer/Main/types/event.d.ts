@@ -1,4 +1,4 @@
 export interface Event {
-  selector:string
-  index:number
+  selector: string;
+  index: number;
 }
