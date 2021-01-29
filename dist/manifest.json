@@ -28,6 +28,6 @@
     "48": "icon48.png",
     "128": "icon128.png"
   },
-  "permissions": ["tabs", "storage", "management"]
+  "permissions": ["tabs", "storage"]
 }
 
