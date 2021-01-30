@@ -1,0 +1,98 @@
+Arguments: 
+  /usr/local/bin/node /usr/share/yarn/bin/yarn.js add react-select
+
+PATH: 
+  /home/kajiri/.rbenv/shims:/home/kajiri/.rbenv/bin:/home/kajiri/go/bin:/home/kajiri/.yarn/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/Users/kajir/AppData/Local/Programs/Python/Python38/Scripts/:/mnt/c/Users/kajir/AppData/Local/Programs/Python/Python38/:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Program Files/dotnet/:/mnt/c/flutter/bin:/mnt/c/Program Files/nodejs/:/mnt/c/Program Files/Git/cmd:/mnt/c/PICT/bin:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Users/kajir/scoop/apps/yarn/current/Yarn/bin:/mnt/c/Users/kajir/scoop/apps/yarn/current/global/node_modules/.bin:/mnt/c/Users/kajir/AppData/Local/Microsoft/WindowsApps:/mnt/c/Vim/vim82:/mnt/c/Users/kajir/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/kajir/AppData/Local/Programs/Microsoft VS Code Insiders/bin:/mnt/c/Users/kajir/AppData/Roaming/npm:/mnt/c/Users/kajir/flutter/bin:/mnt/c/Users/kajir/AppData/Local/GitHubDesktop/bin:/home/kajiri/.fzf/bin
+
+Yarn version: 
+  1.22.5
+
+Node version: 
+  14.15.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: getaddrinfo EAI_AGAIN registry.npmjs.org
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:67:26)
+
+npm manifest: 
+  {
+    "name": "chrome-extension-react-typescript-boilerplate",
+    "version": "1.1.0",
+    "description": "A boilerplate project to quickly build a Chrome extension using TypeScript and React (built using webpack).",
+    "scripts": {
+      "build": "webpack --config webpack.prod.js",
+      "dev": "webpack --config webpack.dev.js",
+      "watch": "webpack -w --config webpack.dev.js",
+      "watchp": "webpack -w --config webpack.prod.js"
+    },
+    "author": "Joe Martella",
+    "license": "MIT",
+    "devDependencies": {
+      "@types/chrome": "^0.0.60",
+      "@types/react": "^16.9.32",
+      "@types/react-dom": "^16.9.6",
+      "css-loader": "^5.0.1",
+      "node-sass": "^5.0.0",
+      "sass-loader": "^10.1.1",
+      "style-loader": "^2.0.0",
+      "ts-loader": "^4.0.1",
+      "typescript": "^3.8.0",
+      "webpack": "^4.42.1",
+      "webpack-cli": "^3.3.11",
+      "webpack-merge": "^4.2.2"
+    },
+    "dependencies": {
+      "@types/jquery": "^3.5.5",
+      "@typescript-eslint/eslint-plugin": "^4.14.1",
+      "@typescript-eslint/parser": "^4.14.1",
+      "autoprefixer": "^10.2.1",
+      "axios": "^0.21.1",
+      "babel-eslint": "^10.1.0",
+      "css-selector-generator": "^2.1.2",
+      "dayjs": "^1.10.4",
+      "dotenv": "^8.2.0",
+      "eslint": "^7.18.0",
+      "firebase": "^8.2.4",
+      "firebaseui": "^4.7.1",
+      "husky": "^4.3.8",
+      "jquery": "^3.5.1",
+      "lint-staged": "^10.5.3",
+      "postcss": "^8.2.4",
+      "prettier": "^2.2.1",
+      "pretty-quick": "^3.1.0",
+      "react": "^16.13.1",
+      "react-dom": "^16.13.1",
+      "react-firebaseui": "^4.1.0",
+      "stylelint": "^13.9.0",
+      "stylelint-config-recommended": "^3.0.0",
+      "stylelint-config-standard": "^20.0.0",
+      "stylelint-order": "^4.1.0",
+      "tailwindcss": "^2.0.2",
+      "uuid": "^8.3.2",
+      "webextension-polyfill-ts": "^0.22.0"
+    },
+    "husky": {
+      "hooks": {
+        "pre-commit": "lint-staged"
+      }
+    },
+    "lint-staged": {
+      "*.{js,ts,jsx,tsx}": [
+        "pretty-quick --staged",
+        "eslint --fix",
+        "git add"
+      ],
+      "*.{css,scss}": [
+        "stylelint --fix"
+      ]
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

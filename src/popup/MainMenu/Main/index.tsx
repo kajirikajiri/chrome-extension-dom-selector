@@ -7,12 +7,11 @@ import { resetBrowserStorageEvents } from "../../../scripts/resetBrowserStorageE
 import dayjs from "dayjs";
 import { getRecordingData } from "../../EventPlayer/Main/getRecordingData";
 import { api } from "../../../scripts/api";
+import { Event } from "../../../types/event";
 
 export default function Popup() {
   const [width, setWidth] = useState(0);
-  const [events, setEvents] = useState<{ selector: string; index: number }[]>(
-    []
-  );
+  const [events, setEvents] = useState<Event[]>([]);
   const [saved, setSaved] = useState(false);
   const [userUuid, setUserUuid] = useState<string>();
   const [hasEventsList, setHasEventsList] = useState(false);
@@ -67,6 +66,9 @@ export default function Popup() {
   };
 
   const saveRecordingData = async () => {
+    const { currentEventsLabel } = await browser.storage.local.get(
+      "currentEventsLabel"
+    );
     if (
       typeof userUuid === "string" &&
       Array.isArray(events) &&
@@ -77,9 +79,9 @@ export default function Popup() {
           events,
           userUuid,
           eventsUuid: uuid(),
-          eventsLabel: "sample",
-          createdAt: dayjs(),
-          updatedAt: dayjs(),
+          eventsLabel: currentEventsLabel,
+          createdAt: dayjs().format(),
+          updatedAt: dayjs().format(),
         })
         .then((res) => {
           resetBrowserStorageEvents();

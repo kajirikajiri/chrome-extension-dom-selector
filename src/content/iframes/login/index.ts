@@ -5,8 +5,6 @@ export class IframeLogin extends Iframe {
     super();
 
     this.width = "264px";
-    // iframe.src = browser.extension.getURL("login.html");
-    // iframe.src = "http://localhost:3000/login"
-    this.element.src = "https://next-puppeteer.vercel.app/login";
+    this.element.src = process.env.loginUrl;
   }
 }

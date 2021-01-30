@@ -30,14 +30,22 @@ export default function Main() {
       <>
         <div>header events player</div>
         <div className="w-full">
-          {eventsList.map(({ label, events }, i) => {
+          {eventsList.map(({ label, events, eventsUuid }, i) => {
             return (
-              <div className="flex justify-between">
+              <div key={eventsUuid} className="flex justify-between">
                 <details>
-                  <summary>{label}</summary>
-                  <EventsComponent events={events} />
+                  <EventsComponent
+                    eventsUuid={eventsUuid}
+                    eventsLabel={label}
+                    events={events}
+                    eventsList={eventsList}
+                    index={i}
+                    setEventsList={setEventsList}
+                  />
                 </details>
-                <button onClick={() => handleClick(events)}>▶︎</button>
+                <button type="button" onClick={() => handleClick(events)}>
+                  ▶︎
+                </button>
               </div>
             );
           })}

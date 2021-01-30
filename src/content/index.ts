@@ -17,16 +17,16 @@ import { showLogin } from "./showLogin";
 import { showMainMenu } from "./showMainMenu";
 import { execSetLogin } from "./execSetLogin";
 import { Recorder } from "./recorder";
+import { Event } from "../types/event";
 
 interface Req {
   toggle?: true;
   recording?: "start" | "stop";
   loaded?: true;
-  selector?: string;
-  index?: number;
+  event?: Event;
+  hover?: true;
   loginSuccess?: true;
   showRecordingData?: true;
-  quickClick?: true;
   showLogout?: true;
 }
 
@@ -104,12 +104,56 @@ browser.runtime.onMessage.addListener((req: Req) => {
       } else if (req.recording === "stop") {
         endRecording(closeAllIframe, recorder, iframeMainMenu);
         return Promise.resolve({ success: true });
-      } else if (req.selector && "index" in req && req.quickClick === true) {
-        execSmoothScroll(req.selector, req.index);
+      } else if ("event" in req && req.hover === true) {
+        const el = <HTMLElement>(
+          document.querySelectorAll(req.event.selector)[req.event.index]
+        );
+        el.scrollIntoView();
+        const originBackground = el.style.background;
+        const originTransition = el.style.transition;
+        el.style.background =
+          "linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%), linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%), linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%)";
+        el.style.transition = "1.0s";
+        setTimeout(() => {
+          el.style.background = originBackground;
+          el.style.transition = originTransition;
+        }, 1000);
         return Promise.resolve({ success: true });
-      } else if (req.selector && "index" in req) {
-        const el = document.querySelectorAll(req.selector)[req.index];
-        el.scrollIntoView({ behavior: "smooth" });
+      } else if ("event" in req) {
+        recorder.off();
+        if (req.event.action.type === "click") {
+          const el = <HTMLElement>(
+            document.querySelectorAll(req.event.selector)[req.event.index]
+          );
+          const evt = document.createEvent("MouseEvents");
+          evt.initMouseEvent(
+            "click",
+            true,
+            false,
+            window,
+            0,
+            0,
+            0,
+            0,
+            0,
+            false,
+            false,
+            false,
+            false,
+            0,
+            null
+          );
+          el.dispatchEvent(evt);
+        } else if (req.event.action.type === "input") {
+          const el = <HTMLInputElement>(
+            document.querySelectorAll(req.event.selector)[req.event.index]
+          );
+          el.value = req.event.action.inputValue;
+          const event = new Event("input");
+          el.scrollIntoView();
+          el.dispatchEvent(event);
+        }
+        recorder.on();
         return Promise.resolve({ success: true });
       } else if (req.showRecordingData === true) {
         showRecordingData(closeAllIframe, iframeEventPlayer, iframeMainMenu);

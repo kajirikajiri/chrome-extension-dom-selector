@@ -4,6 +4,6 @@ export class IframeLogout extends Iframe {
   constructor() {
     super();
 
-    this.element.src = "https://next-puppeteer.vercel.app/logout";
+    this.element.src = process.env.logoutUrl;
   }
 }
