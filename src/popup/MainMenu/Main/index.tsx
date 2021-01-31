@@ -115,7 +115,9 @@ export default function Popup() {
   if (width > 0) {
     return (
       <div className="flex flex-col">
-        <button onClick={recordingStart}>start recording</button>
+        <button onClick={recordingStart}>
+          {events.length > 0 ? <>recording 再開</> : <>recording 開始</>}
+        </button>
         {events.length > 0 ? (
           <button onClick={saveRecordingData}>save recording data</button>
         ) : (

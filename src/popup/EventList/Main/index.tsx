@@ -8,6 +8,7 @@ import { Event } from "../../../types/event";
 import { useForm } from "react-hook-form";
 import { v4 as uuid } from "uuid";
 import { EventsList } from "../../EventPlayer/Main/types/eventsList";
+import Modal from "react-modal";
 
 interface Req {
   selector?: string;
@@ -15,12 +16,18 @@ interface Req {
   tagName?: string;
 }
 
+Modal.setAppElement(document.getElementById("__eventList__"));
+
 export default function Main() {
+  const defaultLabel = "labelです";
   const [width, setWidth] = useState(0);
+  const [event, setEvent] = useState<Event>();
+  const [index, setIndex] = useState<number>();
   const [events, setEvents] = useState<Event[]>([]);
   const [eventsLabel, setEventsLabel] = useState<EventsList["label"]>(
-    "labelです"
+    defaultLabel
   );
+  const [isOpen, setIsOpen] = useState(false);
   const { register, handleSubmit } = useForm({ mode: "onBlur" });
   useEffect(() => {
     window.onresize = () => {
@@ -39,7 +46,7 @@ export default function Main() {
           setEvents(currentEvents);
         }
         if (currentEventsLabel === "") {
-          setEventsLabel("labelです");
+          setEventsLabel(defaultLabel);
         } else {
           setEventsLabel(currentEventsLabel);
         }
@@ -93,6 +100,19 @@ export default function Main() {
     setEvents([]);
   };
 
+  const handleClickDelete = async (index) => {
+    const result = confirm("削除してよろしいですか");
+    if (result) {
+      const copyEvents = [...events];
+      copyEvents.splice(index, 1);
+      setEvents(copyEvents);
+      setIsOpen(false);
+      await browser.storage.local.set({
+        currentEvents: copyEvents,
+      });
+    }
+  };
+
   const onBlur = ({
     data,
     label,
@@ -100,6 +120,8 @@ export default function Main() {
     label: string;
     data: {
       label: string;
+      selector: string;
+      index: number;
       action: {
         type: "input" | "click";
         inputValue?: string;
@@ -121,18 +143,57 @@ export default function Main() {
     })();
   };
 
+  const openModal = (event, index) => {
+    setEvent(event);
+    setIndex(index);
+    setIsOpen(true);
+  };
+
+  const renderCurrentEvent = () => {
+    return (
+      <div>
+        <div className="flex justify-between">
+          <button onClick={() => setIsOpen(false)}>close modal</button>
+          <button onClick={() => handleClickDelete(index)}>🗑️</button>
+        </div>
+        <form onBlur={handleSubmit(onBlur)}>
+          <input
+            autoFocus
+            name={`data[${index}].selector`}
+            defaultValue={event?.selector}
+            ref={register}
+          />
+          <input
+            name={`data[${index}].index`}
+            defaultValue={event?.index}
+            ref={register({
+              valueAsNumber: true,
+            })}
+            type="number"
+          />
+        </form>
+      </div>
+    );
+  };
+
   if (width > 0) {
     return (
       <>
         <div>
-          <form onBlur={handleSubmit(onBlur)}>
-            <input
-              className="text-lg"
-              name={`label`}
-              ref={register}
-              defaultValue={eventsLabel}
-            />
-          </form>
+          <div className="flex">
+            <form onBlur={handleSubmit(onBlur)}>
+              <input
+                className="text-lg"
+                name={`label`}
+                ref={register}
+                defaultValue={eventsLabel}
+              />
+            </form>
+            <button onClick={handleClickReset}>reset events</button>
+          </div>
+          <Modal isOpen={isOpen} ariaHideApp={false}>
+            {renderCurrentEvent()}
+          </Modal>
           {events.map((event, i) => {
             return (
               <div key={event.uuid}>
@@ -166,6 +227,9 @@ export default function Main() {
                       >
                         ▶
                       </button>
+                      <button type="button" onClick={() => openModal(event, i)}>
+                        ⚙️
+                      </button>
                     </div>
                   </div>
                   {event.action.type === "input" ? (
@@ -186,9 +250,6 @@ export default function Main() {
             );
           })}
         </div>
-        <button className="fixed bottom-0" onClick={handleClickReset}>
-          reset events
-        </button>
       </>
     );
   }

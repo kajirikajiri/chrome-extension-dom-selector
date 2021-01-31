@@ -27,7 +27,7 @@ export default function Main() {
           onClick={handleClickEnd}
           className="w-full h-full flex justify-center items-center"
         >
-          recording stop
+          <span className="text-4xl">⏹️</span>
         </button>
       </>
     );
